@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "978100981264",
+    "project_id": "a-cha-delivery",
+    "storage_bucket": "a-cha-delivery.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:978100981264:android:2901e32229b44f65d2c495",
+        "android_client_info": {
+          "package_name": "com.example.a_cha_delivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "978100981264-fo02b37s3vi0k8i1ke1ks7iqg75jffla.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.a_cha_delivery",
+            "certificate_hash": "85fd3401bc249bb0d81223d15f8181902986816a"
+          }
+        },
+        {
+          "client_id": "978100981264-0gu0ids3v4hh20pspek765338n0b3j0k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaI1orafkvf-FSnD5exUrDHZAshbk7w_A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "978100981264-0gu0ids3v4hh20pspek765338n0b3j0k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
