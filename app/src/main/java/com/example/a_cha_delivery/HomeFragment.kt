@@ -3,13 +3,20 @@ package com.example.a_cha_delivery
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.iterator
+import com.example.a_cha_delivery.data_classes.OrderInfo
 import com.example.a_cha_delivery.databinding.FragmentHomeBinding
 import com.example.a_cha_delivery.databinding.NeedItemInfoBinding
 import com.example.a_cha_delivery.databinding.OrderListInfoBinding
+import com.example.a_cha_delivery.databinding.OrderListOnMapBinding
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -50,11 +57,26 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
     }
 
+    val orderDataByTime = mutableListOf<OrderInfo>()
+
+    fun loadDataByTime(){
+        orderDataByTime.clear()
+
+        for(i in MainActivity.orderInfos){
+
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+
+        binding.btnOrderInfoClose.setOnClickListener {
+            binding.orderItemList.removeAllViews()
+            binding.layoutOrderInfos.visibility = View.GONE
+        }
 
         var enabledDeliveryTime = mutableListOf<String>()
         val info = MainActivity.orderInfos
@@ -139,10 +161,31 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
         }
 
 
+
+        //시간 선택 버튼 만들기
+        val list = MainActivity.orderInfos.groupingBy { it.deliveryTime }.eachCount()
+        Log.d("myTag",list.toString())
+        for(i in list){
+            val sdf = SimpleDateFormat("HH:mm")
+
+            Log.d("myTag",i.key.toDate().toString())
+            val selectiveTime = sdf.format(i.key.toDate()).toString()
+
+            val btnInstance = Button(this.context).apply{
+                TODO("여기부터 하자")
+                //resources.getColor(R.color.black).toDrawable()
+                text = selectiveTime
+            }
+            binding.btnGroupLayout.addView(btnInstance,ViewGroup.LayoutParams(100,100))
+
+        }
+
         val mF:SupportMapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mF.getMapAsync(this)
         return binding.root
     }
+
+
 
     companion object {
         /**
@@ -187,6 +230,7 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
                                         .position(latLng)
                                         .title(i.toString()+"동")
 
+
                                     mapView.addMarker(marker)
                                 }
 
@@ -208,6 +252,47 @@ class HomeFragment : Fragment(), OnMapReadyCallback {
 
 
             mapView.moveCamera(CameraUpdateFactory.newLatLngZoom(startLocation,16.2f))
+
+
+            mapView.setOnMarkerClickListener(object :GoogleMap.OnMarkerClickListener{
+                override fun onMarkerClick(marker: Marker): Boolean {
+                    binding.orderItemList.removeAllViews()
+
+                    binding.layoutOrderInfos.visibility = View.VISIBLE
+                    val dongOrderInfos = MainActivity.orderInfos.groupingBy { it.detailedLocation.split("동")[0]}.eachCount().toList()
+
+
+
+
+                    for(i in MainActivity.orderInfos){
+                        if(i.detailedLocation.split("동")[0].replace("[^0-9]".toRegex(), "").toInt() ==marker.title!!.replace("동","").toInt()
+                            &&i.deliveryState==0){
+                            val elementBinding:OrderListOnMapBinding = OrderListOnMapBinding.inflate(LayoutInflater.from(binding.root.context),binding.root,false)
+                            elementBinding.textUserID.text = i.userID
+                            elementBinding.userAddress.text = i.detailedLocation
+
+
+
+                            //
+                            var it = i.orderItems.groupingBy { it }.eachCount().toMutableMap()
+
+                            var orderText = ""
+                            for (j in it) {
+                                orderText += j.key.toString() + " "+j.value.toString()+"개\n"
+                            }
+
+
+
+
+                            elementBinding.textOrderElements.text = orderText
+
+
+                            binding.orderItemList.addView(elementBinding.root)
+                        }
+                    }
+                    return false
+                }
+            })
 
 
         }

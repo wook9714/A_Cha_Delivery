@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity(){
     companion object{
         val location:String = "은마"
         val orderInfos:MutableList<OrderInfo> = mutableListOf()
-
     }
 
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
@@ -58,6 +57,7 @@ class MainActivity : AppCompatActivity(){
 
         }.attach()
         binding.viewPager.isUserInputEnabled = false
+
 
 
 
