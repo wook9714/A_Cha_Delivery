@@ -37,25 +37,18 @@ class ListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val menuList = mutableListOf<String>("배송중","배송완료","미결제","전체")
         binding = FragmentListBinding.inflate(inflater,container,false)
-        val listAdapter = ListAdapter()
-        listAdapter.menuList = menuList
-        binding.listViewPager.adapter = listAdapter
 
 
-
-
-        TabLayoutMediator(binding.tabLayout, binding.listViewPager){ tab, position ->
-            tab.text = menuList[position]
-        }.attach()
-
-
+        initalizeAdapter()
         return binding.root
     }
 
+
+
     companion object {
         @JvmStatic
+        val listAdapter = ListAdapter()
         fun newInstance(param1: String, param2: String) =
             ListFragment().apply {
                 arguments = Bundle().apply {
@@ -63,5 +56,18 @@ class ListFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+
+        fun initalizeAdapter(){
+            val menuList = mutableListOf<String>("배송중","배송완료","미결제","전체")
+            listAdapter.menuList = menuList
+            binding.listViewPager.adapter = listAdapter
+
+
+
+
+            TabLayoutMediator(binding.tabLayout, binding.listViewPager){ tab, position ->
+                tab.text = menuList[position]
+            }.attach()
+        }
     }
 }

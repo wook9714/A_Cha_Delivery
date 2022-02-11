@@ -1,6 +1,8 @@
 package com.example.a_cha_delivery.function
 
 import android.util.Log
+import com.example.a_cha_delivery.MainActivity
+import com.example.a_cha_delivery.data_classes.OrderInfo
 import java.text.SimpleDateFormat
 
 object DataFunction {
@@ -16,5 +18,14 @@ object DataFunction {
         val date = sdf.format(timestamp)
         Log.d("TTT UNix Date -> ", sdf.format((System.currentTimeMillis())).toString())
         Log.d("TTTT date -> ", date.toString())
+    }
+
+    fun findDataId(x:OrderInfo):String{
+        for(i in MainActivity.orderInfos){
+            if(i.value.equals(x)){
+                return i.key
+            }
+        }
+        return ""
     }
 }

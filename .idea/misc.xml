@@ -13,6 +13,7 @@
         <entry key="app/src/main/res/layout/need_item_info.xml" value="0.335" />
         <entry key="app/src/main/res/layout/order_list_info.xml" value="0.335" />
         <entry key="app/src/main/res/layout/order_list_on_map.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/selective_btn.xml" value="0.5" />
       </map>
     </option>
   </component>

@@ -15,28 +15,34 @@ import com.example.a_cha_delivery.data_classes.OrderItemsID
 import com.example.a_cha_delivery.databinding.ListPageViewBinding
 import com.example.a_cha_delivery.databinding.NeedItemInfoBinding
 import com.example.a_cha_delivery.databinding.OrderListInfoBinding
+import com.example.a_cha_delivery.function.DataFunction
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.min
 
 class ListAdapter():RecyclerView.Adapter<Holder>() {
+
+
     var menuList:MutableList<String> = mutableListOf()
 
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = ListPageViewBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+
         return Holder(binding)
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         if(position!=3){
-            holder.setInfo(MainActivity.orderInfos.filter{it.deliveryState==position}.toMutableList())
+            holder.setInfo(MainActivity.orderInfos.values.filter{it.deliveryState==position}.toMutableList())
         }
         else{
-            holder.setInfo(MainActivity.orderInfos)
+            holder.setInfo(MainActivity.orderInfos.values.toMutableList())
         }
+
     }
+
 
     override fun getItemCount(): Int {
         return menuList.size
@@ -135,6 +141,16 @@ class Holder(val binding:ListPageViewBinding):RecyclerView.ViewHolder(binding.ro
                         if(adapterPosition==0){
 
                             orderListInfoBinding.btnOrderState.visibility = View.VISIBLE
+                            orderListInfoBinding.btnOrderState.setOnClickListener {
+
+                                MainActivity.db.collection("orderInfo").document(DataFunction.findDataId(j)).update("deliveryState",1).addOnSuccessListener {
+                                    Log.d("firebase","데이터 업데이트 성공")
+                                    //TODO("여기서부터")
+                                    MainActivity.loadDataFromFirestore(MainActivity.d1,MainActivity.d2,true)
+
+                               }
+
+                            }
                             binding.scrollItems.addView(orderListInfoBinding.parentLayout,binding.scrollItems.indexOfChild(needItemInfoBinding.root)+1)
                         }
                         else{
